@@ -212,6 +212,73 @@ apt-get update
 apt-get install bind9 -y
 ```
 
+**cat /etc/bind/named.conf.local**
+```
+zone "marley.IT02.com" {
+     type master;
+     file "/etc/bind/jarkom3/marley.IT02.com";
+};
+
+zone "eldia.IT02.com" {
+      type master;
+      file "/etc/bind/jarkom3/eldia.IT02.com";
+};
+```
+
+mkdir /etc/bind/jarkom3
+cp /etc/bind/db.local /etc/bind/jarkom3/marley.IT02.com
+cp /etc/bind/db.local /etc/bind/jarkom3/eldia.IT02.com
+
+**/etc/bind/jarkom3/marley.IT02.com**
+```
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     marley.IT02.com. root.marley.IT02.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      marley.IT02.com.
+@       IN      A       192.234.4.2 ;ip tybur dhcp server
+@       IN      AAAA    ::1
+```
+
+**/etc/bind/jarkom3/eldia.IT02.com**
+```
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     eldia.IT02.com. root.eldia.IT02.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      eldia.IT02.com.
+@       IN      A       192.234.4.2 ;ip tybur dhcp server
+@       IN      AAAA    ::1
+```
+
+**/etc/bind/named.conf.options**
+```
+options {
+      directory "/var/cache/bind";
+
+  forwarders {
+          192.168.122.1;
+  };
+
+      allow-query{any;};
+      auth-nxdomain no;       # conform to RFC1035
+      listen-on-v6 { any; };
+  };
+```
+
 ## Soal 1
 > Lakukan konfigurasi sesuai dengan peta yang sudah diberikan.
 
