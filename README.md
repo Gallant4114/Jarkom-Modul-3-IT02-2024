@@ -224,11 +224,11 @@ zone "eldia.IT02.com" {
       file "/etc/bind/jarkom3/eldia.IT02.com";
 };
 ```
-
+```
 mkdir /etc/bind/jarkom3
 cp /etc/bind/db.local /etc/bind/jarkom3/marley.IT02.com
 cp /etc/bind/db.local /etc/bind/jarkom3/eldia.IT02.com
-
+```
 **/etc/bind/jarkom3/marley.IT02.com**
 ```
 ; BIND data file for local loopback interface
