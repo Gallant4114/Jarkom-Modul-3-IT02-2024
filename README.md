@@ -73,6 +73,8 @@ iface eth0 inet static
 	address 192.234.4.3
 	netmask 255.255.255.0
 	gateway 192.234.4.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Fritz - DNS Server
@@ -82,33 +84,41 @@ iface eth0 inet static
 	address 192.234.4.2
 	netmask 255.255.255.0
 	gateway 192.234.4.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Warhammer - Database Server
 ```
 auto eth0
 iface eth0 inet static
-	address 192.234.2.4
+	address 192.234.3.4
 	netmask 255.255.255.0
-	gateway 192.234.2.1
+	gateway 192.234.3.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Beast - Load Balancer (Laravel)
 ```
 auto eth0
 iface eth0 inet static
-	address 192.234.2.2
+	address 192.234.3.2
 	netmask 255.255.255.0
-	gateway 192.234.2.1
+	gateway 192.234.3.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Colossal - Load Balancer (PHP)
 ```
 auto eth0
 iface eth0 inet static
-	address 192.234.2.3
+	address 192.234.3.3
 	netmask 255.255.255.0
-	gateway 192.234.2.1
+	gateway 192.234.3.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Annie - Laravel Worker
@@ -118,6 +128,8 @@ iface eth0 inet static
 	address 192.234.1.2
 	netmask 255.255.255.0
 	gateway 192.234.1.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Bertholdt - Laravel Worker
@@ -127,6 +139,8 @@ iface eth0 inet static
 	address 192.234.1.3
 	netmask 255.255.255.0
 	gateway 192.234.1.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Reiner - Laravel Worker
@@ -136,6 +150,8 @@ iface eth0 inet static
 	address 192.234.1.4
 	netmask 255.255.255.0
 	gateway 192.234.1.1
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
 ```
 
 ### Armin - PHP Worker
