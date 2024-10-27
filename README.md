@@ -278,3 +278,36 @@ echo 'net.ipv4.ip_forward=1' > /etc/sysctl.conf
 ```
 service isc-dhcp-relay restart
 ```
+
+## Soal 2 dan 3
+> Client yang melalui bangsa marley mendapatkan range IP dari [prefix IP].1.05 - [prefix IP].1.25 dan [prefix IP].1.50 - [prefix IP].1.100 **(2)**.
+Client yang melalui bangsa eldia mendapatkan range IP dari [prefix IP].2.09 - [prefix IP].2.27 dan [prefix IP].2 .81 - [prefix IP].2.243 (3)
+
+Perlu melakukan penambahan konfigurasi pada DHCP Server.
+1. Buka `nano tybur.bashrc` dan tambahkan konfigurasi seperti berikut
+```
+echo 'INTERFACES="eth0"' > /etc/default/isc-dhcp-server
+
+echo 'subnet 192.234.1.0 netmask 255.255.255.0 {
+	range 192.234.1.05 192.234.1.25;	#range IP address client Marley
+	range 192.234.1.50 192.234.1.100;
+	option routers 192.234.1.0;
+	option broadcast-address 192.234.1.255;
+	option domain-name-servers 192.234.4.2;	#IP address DNS server
+}
+subnet 192.234.2.0 netmask 255.255.255.0 {
+	range 192.234.2.09 192.234.2.27;	#range IP address client Eldia
+	range 192.234.2.81 192.234.2.243;
+	option routers 192.234.2.0;
+	option broadcast-address 192.234.2.255;
+	option domain-name-servers 192.234.4.2;	#IP address DNS server
+}
+
+subnet 192.234.3.0 netmask 255.255.255.0 {}
+
+subnet 192.234.4.0 netmask 255.255.255.0 {}' > /etc/dhcp/dhcpd.conf
+```
+
+2. Pengujian IP Address pada client
+
+Membuka console pada masing-masing client `Zeke` dan `Erwin`.
