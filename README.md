@@ -64,6 +64,9 @@ auto eth4
 iface eth4 inet static
 	address 192.234.4.1
 	netmask 255.255.255.0
+
+up echo 'nameserver 192.168.122.1' > /etc/resolv.conf
+up iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.234.0.0/16
 ```
 
 ### Tybur - DHCP Server
