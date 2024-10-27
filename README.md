@@ -39,6 +39,8 @@ Pada topologi sebelumnya, sempat tidak bisa connect dengan semua switch, ada dua
 
 Image yang digunakan adalah `danielcristh0/debian-buster:1.1`
 
+Prefix IP `192.234`
+
 ### Paradis - Router (DHCP Relay)
 
 ```
@@ -197,7 +199,7 @@ iface eth0 inet dhcp
 ```
 ***
 
-## Soal
+## Soal 0
 > Pulau Paradis telah menjadi tempat yang damai selama 1000 tahun, namun kedamaian tersebut tidak bertahan selamanya. Perang antara kaum Marley dan Eldia telah mencapai puncak. Kaum Marley yang dipimpin oleh Zeke, me-register domain name **marley.yyy.com** untuk worker Laravel mengarah pada **Annie**. Namun ternyata tidak hanya kaum Marley saja yang berinisiasi, kaum Eldia ternyata sudah mendaftarkan domain name **eldia.yyy.com** untuk worker PHP **(0)** mengarah pada **Armin**.
 
 Dalam modul ini diperlukan instalasi `bind9` untuk DNS server, dalam hal ini adalah node `Fritz`. Caranya adalah sebagai berikut,
@@ -210,4 +212,69 @@ apt-get update
 apt-get install bind9 -y
 ```
 
+## Soal 1
+> Lakukan konfigurasi sesuai dengan peta yang sudah diberikan.
 
+IP Address yang digunakan client harus sesuai dengan DHCP Server (`Tybur`). Oleh karena itu, perlu dilakukan setting untuk DHCP Server.
+
+### Setup Tybur - DHCP Server
+1. Pertama adalah melakukan update dan menginstall dependencies yang diperlukan pada console `Tybur`.
+```
+apt-get update
+apt-get install isc-dhcp-server -y
+```
+
+2. Setelah berhasil install, jalankan service tersebut
+```
+service isc-dhcp-server start
+```
+
+3. Membuat script tybur.bashrc dengan `nano tybur.bashrc`
+
+Isi dari konfigurasinya adalah
+```
+echo 'INTERFACES="eth0"' > /etc/default/isc-dhcp-server
+
+echo 'subnet 192.234.1.0 netmask 255.255.255.0 {
+	option routers 192.234.1.0;
+	option broadcast-address 192.234.1.255;
+	option domain-name-servers 192.234.4.2; #IP address DNS Server
+}
+subnet 192.234.2.0 netmask 255.255.255.0 {
+	option routers 192.234.2.0;
+	option broadcast-address 192.234.2.255;
+	option domain-name-servers 192.234.4.2; #IP address DNS Server
+}
+
+subnet 192.234.3.0 netmask 255.255.255.0 {}
+
+subnet 192.234.4.0 netmask 255.255.255.0 {}' > /etc/dhcp/dhcpd.conf
+```
+
+### Setup Paradis - DHCP Relay
+1. Update dan install dependencies yang diperlukan
+```
+apt-get update
+apt-get install isc-dhcp-relay -y
+```
+
+2. Setelah berhasil install, jalankan service tersebut
+```
+service isc-dhcp-server start
+```
+
+3. Membuat script paradis.bashrc dengan `nano paradis.bashrc`
+
+Memasukkan konfigurasi berikut:
+```
+echo 'SERVERS="192.234.4.3" # IP address DHCP Server
+INTERFACES="eth1 eth2 eth3 eth4"
+OPTIONS=""' > /etc/default/isc-dhcp-relay
+
+echo 'net.ipv4.ip_forward=1' > /etc/sysctl.conf
+```
+
+4. Jika sudah, maka perlu dilakukan restart
+```
+service isc-dhcp-relay restart
+```
