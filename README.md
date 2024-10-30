@@ -214,27 +214,27 @@ apt-get install bind9 -y
 
 **cat /etc/bind/named.conf.local**
 ```
-zone "marley.IT02.com" {
+zone "marley.it02.com" {
      type master;
-     file "/etc/bind/jarkom3/marley.IT02.com";
+     file "/etc/bind/it02/marley.IT02.com";
 };
 
 zone "eldia.IT02.com" {
       type master;
-      file "/etc/bind/jarkom3/eldia.IT02.com";
+      file "/etc/bind/it02/eldia.IT02.com";
 };
 ```
 ```
 mkdir /etc/bind/jarkom3
-cp /etc/bind/db.local /etc/bind/jarkom3/marley.IT02.com
-cp /etc/bind/db.local /etc/bind/jarkom3/eldia.IT02.com
+cp /etc/bind/db.local /etc/bind/it02/marley.it02.com
+cp /etc/bind/db.local /etc/bind/it02/eldia.it02.com
 ```
-**/etc/bind/jarkom3/marley.IT02.com**
+**/etc/bind/it02/marley.IT02.com**
 ```
 ; BIND data file for local loopback interface
 ;
 $TTL    604800
-@       IN      SOA     marley.IT02.com. root.marley.IT02.com. (
+@       IN      SOA     marley.it02.com. root.marley.it02.com. (
                               2         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
@@ -242,8 +242,8 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      marley.IT02.com.
-@       IN      A       192.234.4.2 ;ip tybur dhcp server
-@       IN      AAAA    ::1
+@       IN      A       192.234.1.2
+www	IN	CNAME	marley.it02.com.
 ```
 
 **/etc/bind/jarkom3/eldia.IT02.com**
@@ -252,7 +252,7 @@ $TTL    604800
 ; BIND data file for local loopback interface
 ;
 $TTL    604800
-@       IN      SOA     eldia.IT02.com. root.eldia.IT02.com. (
+@       IN      SOA     eldia.it02.com. root.eldia.it02.com. (
                               2         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
@@ -260,8 +260,8 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      eldia.IT02.com.
-@       IN      A       192.234.4.2 ;ip tybur dhcp server
-@       IN      AAAA    ::1
+@       IN      A       192.234.2.2
+www	IN	CNAME	eldia.it02.com.
 ```
 
 **/etc/bind/named.conf.options**
