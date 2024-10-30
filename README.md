@@ -378,3 +378,13 @@ subnet 192.234.4.0 netmask 255.255.255.0 {}' > /etc/dhcp/dhcpd.conf
 2. Pengujian IP Address pada client
 
 Membuka console pada masing-masing client `Zeke` dan `Erwin`.
+
+Menjalankan command pada client
+```
+ip a
+```
+
+## Soal 
+> Client mendapatkan DNS dari keluarga Fritz dan dapat terhubung dengan internet melalui DNS tersebut (4)
+
+Membuka web console pada `Tybur` 
