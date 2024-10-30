@@ -259,7 +259,7 @@ $TTL    604800
                         2419200         ; Expire
                          604800 )       ; Negative Cache TTL
 ;
-@       IN      NS      eldia.IT02.com.
+@       IN      NS      eldia.it02.com.
 @       IN      A       192.234.2.2
 www	IN	CNAME	eldia.it02.com.
 ```
