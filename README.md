@@ -548,3 +548,156 @@ Lakukan restart setelah konfigurasi
 ```
 service isc-dhcp-server restart
 ```
+
+## Soal 6
+> **Armin** berinisiasi untuk memerintahkan setiap worker PHP untuk melakukan konfigurasi virtual host untuk website berikut https://intip.in/BangsaEldia dengan menggunakan php 7.3 **(6)**
+
+Untuk melakukan konfigurasi, maka perlu membuka web console untuk node PHP Worker, yaitu `Armin`, `Eren`, dan `Mikasa`.
+
+- Update dan Install Dependencies
+```
+apt-get update
+apt-get install lynx nginx wget unzip php7.3 php-fpm -y
+```
+
+- Jalankan service PHP dan Nginx
+```
+service php7.3-fpm start
+service nginx start
+```
+
+- Buat direktori untuk simpan file
+```
+mkdir -p /var/www/html/download/
+```
+
+- Download File dari Google Drive
+```
+wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=1TvebIeMQjRjFURKVtA32lO9aL7U2msd6' -O /var/www/html/download/eldia.zip
+```
+
+- Unzip dan letakkan pada `/var/www/html/download/`
+```
+unzip /var/www/html/download/eldia.zip -d /var/www/eldia.it02.com
+```
+
+- Pindahkan file yang sudah diextract
+```
+mv /var/www/html/download/eldia/modul-3/* /var/www/html/
+```
+
+- Hapus direktori download
+```
+rm -rf /var/www/html/download/
+```
+
+- Buka text editor untuk konfigurasi Nginx
+```
+nano /etc/nginx/sites-available/eldia.it02.com
+```
+
+- Masukkan konfigurasi
+```
+server {
+	listen 80;
+	server_name eldia.it02.com;
+
+	root /var/www/eldia.it02.com;
+
+	index index.php index.html index.htm;
+
+	server_name _;
+
+	location / {
+		try_files \$uri \$uri/ /index.php?\$query_string;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+	}
+
+	error_log /var/log/nginx/jarkom-it02_error.log;
+	access_log /var/log/nginx/jarkom-it02_access.log;
+}
+```
+
+- Atur konfigurasi menjadi enabled
+```
+ln -s /etc/nginx/sites-available/eldia.it02.com /etc/nginx/sites-enabled
+```
+
+- Hapus file `default`
+```
+rm /etc/nginx/sites-enabled/default
+```
+
+- Restart service PHP dan Nginx
+```
+service php7.3-fpm restart
+service nginx restart
+```
+
+## Soal 7
+> Dikarenakan Armin sudah mendapatkan kekuatan titan colossal, maka bantulah kaum **eldia** menggunakan **colossal** agar dapat bekerja sama dengan baik. Kemudian lakukan testing dengan 6000 request dan 200 request/second. **(7)**
+
+- Buka web console `Load Balancer Colossal` lalu install dependencies
+```
+apt-get update
+apt-get install lynx nginx php7.3 php-fpm apache2-utils -y 
+```
+
+- Jalankan service `PHP` dan `Nginx`
+```
+service php7.3-fpm start
+service nginx start
+```
+
+- Buka text editor
+```
+nano /etc/nginx/sites-available/load-balancer-it02
+```
+
+- Masukkan konfigurasi
+```
+upstream roundrobin {
+    server 192.234.2.2;
+    server 192.234.2.3;
+    server 192.234.2.4;
+}
+
+server {
+    listen 80;
+
+    server_name _;
+
+    root /var/www/html;
+
+    index index.html index.htm index.nginx-debian.html;
+
+    location / {
+        proxy_pass http://roundrobin;
+	proxy_http_version 1.1;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection 'upgrade';
+	proxy_set_header Host $host;
+	proxy_cache_bypass $http_upgrade
+    }
+}
+```
+
+- Enable `/etc/nginx/sites-enabled`
+```
+ln -s /etc/nginx/sites-available/load-balancer-it02 /etc/nginx/sites-enabled
+```
+
+- Hapus file `default`
+```
+rm /etc/nginx/sites-enabled/default
+```
+
+- Restart service `PHP` dan `Nginx`
+```
+service php7.3-fpm restart
+service nginx restart
+```
